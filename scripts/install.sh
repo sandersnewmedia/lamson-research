@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# install script for lamson-research
 
 ############################################################################################
 #
@@ -11,8 +12,7 @@
 #############################################################################################
 
 # get path to current script and the project
-SCRIPT_ROOT=$( cd "$( dirname "$0" )"; pwd)
-PROJECT_ROOT=${SCRIPT_ROOT}/../
+PROJECT_ROOT=$( cd "$( dirname "$_" )/../"; pwd)
 
 # install needed system tools to setup the virtualenv
 sudo python ${PROJECT_ROOT}/scripts/ez_setup.py

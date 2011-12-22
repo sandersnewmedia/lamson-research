@@ -2,3 +2,5 @@ pyenv/
 *~
 *.pyc
 scripts/fabfile.py
+logs/
+run/

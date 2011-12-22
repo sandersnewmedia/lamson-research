@@ -10,11 +10,25 @@
 #
 #############################################################################################
 
-current="$( cd "$( dirname "$0" )" && pwd )"
-sudo python ${current}/ez_setup.py
+# get path to current script and the project
+SCRIPT_ROOT=$( cd "$( dirname "$0" )"; pwd)
+PROJECT_ROOT=${SCRIPT_ROOT}/../
+
+# install needed system tools to setup the virtualenv
+sudo python ${PROJECT_ROOT}/scripts/ez_setup.py
 sudo easy_install pip virtualenv
-cd ${current}/../
-echo "pyenv/" >> .gitignore
+
+# setup the virtualenv
+cd $PROJECT_ROOT
 virtualenv pyenv --no-site-packages
+
+# install the requirements
 . pyenv/bin/activate
-#pip install -r scripts/requirements.txt
+wget http://pypi.python.org/packages/source/n/nose/nose-1.1.2.tar.gz#md5=144f237b615e23f21f6a50b2183aa817
+tar xzf nose-1.1.2.tar.gz
+cd nose-1.1.2
+python setup.py install
+cd ..
+rm -R nose-*
+pip install -r ${PROJECT_ROOT}/scripts/requirements.txt
+deactivate

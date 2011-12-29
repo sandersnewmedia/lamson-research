@@ -14,6 +14,13 @@
 # get path to current script and the project
 PROJECT_ROOT=$( cd "$( dirname "$_" )/../"; pwd)
 
+if [ -d "$PROJECT_ROOT/pyenv" ]; then
+    echo "\nAlready installed. To reinstall, delete"
+    echo "$PROJECT_ROOT/pyenv"
+    echo "and run this script again.\n"
+    exit 1
+fi
+
 # install needed system tools to setup the virtualenv
 sudo python ${PROJECT_ROOT}/scripts/ez_setup.py
 sudo easy_install pip virtualenv
@@ -31,4 +38,6 @@ python setup.py install
 cd ..
 rm -R nose-*
 pip install -r ${PROJECT_ROOT}/scripts/requirements.txt
+
+# exeunt virtualenv
 deactivate

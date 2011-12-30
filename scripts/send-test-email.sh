@@ -31,4 +31,5 @@ if [ "$TO" = "" ]; then
     TO="$USER+clipboard@sanderslabs.us"
 fi
 
-lamson send -sender test@sanderslabs.us -to $TO -subject "Hello World!" -body "Hello World!" -port 8823
+ATTACHMENT=$PROJECT_ROOT/themailserver/app/data/cat-checking-email.jpg
+lamson send -sender test@sanderslabs.us -to $TO -subject "Hello World!" -body "Hello World!" -port 8823 -attach $ATTACHMENT

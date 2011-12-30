@@ -11,10 +11,10 @@ def START(message, address=None, signal=None, host=None):
         logging.debug('signal "%s" sent to %s' % (signal, address))
     else:
         logging.debug('message sent to %s' % (address))
-
-    # see http://lamsonproject.org/docs/api/lamson.mail-pysrc.html
-    # for API of the 'message' object
     logging.debug('Message is:\n"""\n%s\n"""' % message.body())
-
-    for item in message.walk():
-        print item
+    i = 0
+    for attachment in message.walk():
+        # the first attachment is actually just the message body
+        if i > 0:
+            logging.debug('Message contains attachment %s' % attachment.content_encoding)
+        i += 1

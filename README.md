@@ -1,6 +1,13 @@
 lamson-research
 ===============
 
+*** NOTE: You probably want to spoof your domain as sanderslabs.us for any of this to work ***
+To do this, open up your `/etc/hosts` file and add an entry like:
+
+    127.0.0.1       sanderslabs.us
+
+
+
 To install:
 
     $ cd scripts

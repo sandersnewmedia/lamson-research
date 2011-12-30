@@ -4,23 +4,17 @@ from config.settings import relay
 from lamson import view
 
 
-@route("(address)@(host)", address=".+")
-def START(message, address=None, host=None):
-    return NEW_USER
+@route("(address)@(host)", address="[^\+]+")
+@route("(address)\+(signal)@(host)", address="[^\+]+", signal=".+")
+def START(message, address=None, signal=None, host=None):
+    if signal:
+        logging.debug('signal "%s" sent to %s' % (signal, address))
+    else:
+        logging.debug('message sent to %s' % (address))
 
+    # see http://lamsonproject.org/docs/api/lamson.mail-pysrc.html
+    # for API of the 'message' object
+    logging.debug('Message is:\n"""\n%s\n"""' % message.body())
 
-@route_like(START)
-def NEW_USER(message, address=None, host=None):
-    return NEW_USER
-
-
-@route_like(START)
-def END(message, address=None, host=None):
-    return NEW_USER(message, address, host)
-
-
-@route_like(START)
-@stateless
-def FORWARD(message, address=None, host=None):
-    relay.deliver(message)
-
+    for item in message.walk():
+        print item

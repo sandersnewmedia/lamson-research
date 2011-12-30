@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # run script for lamson-research
 
@@ -23,8 +23,9 @@ cd $PROJECT_ROOT
 . pyenv/bin/activate
 cd themailserver
 
-# stop all lamson processes
-lamson stop -KILL True -ALL `pwd`/run
+# stop any running daemons and start the debug server
+../scripts/stop-daemon.sh 2>&1 > /dev/null
+lamson start -debug
 
 # exeunt virtualenv
 deactivate

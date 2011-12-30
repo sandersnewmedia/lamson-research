@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-# run script for lamson-research
+# start script for lamson-research
 
 ############################################################################################
 #
@@ -19,13 +19,17 @@ if [ ! -d "$PROJECT_ROOT/pyenv" ]; then
     exit 1
 fi
 
+echo "For development purposes, consider using run.sh instead; this should be used for production"
+
 cd $PROJECT_ROOT
 . pyenv/bin/activate
 cd themailserver
 
 # start the server & start the logger
+echo "[starting lamson]"
 lamson start
 lamson log
+echo "[started lamson]"
 
 # exeunt virtualenv
 deactivate

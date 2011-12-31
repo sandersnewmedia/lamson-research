@@ -30,26 +30,28 @@ if [ "$TO" = "" ]; then
     TO="$USER-clipboard@sanderslabs.us"
 fi
 
-echo "How many megabytes should the attachment be? [25]:"
+echo "How many megabytes should the attachment be? (0 for no attachment) [0]:"
 read SIZE
 if [ "$SIZE" = "" ]; then
-    SIZE=25
-fi
-
-echo "What should the filename be? (useful for testing mimetype handling) [delete-me.pdf]:"
-read FILENAME
-if [ "$FILENAME" = "" ]; then
-    FILENAME="delete-me.pdf"
+    SIZE=0
 fi
 
 
-ATTACHMENT=$PROJECT_ROOT/themailserver/app/data/$FILENAME
-rm -f $ATTACHMENT
-echo "Sending... please wait"
-# create a large file, send it
-dd if=/dev/zero of=$ATTACHMENT bs=1048576 count=$SIZE > /dev/null 2>&1
-lamson send -sender test@sanderslabs.us -to $TO -subject "Testing attachments" -body "Attached $SIZE megabyte file" -port 8823 -attach $ATTACHMENT > /dev/null 2>&1
+if [ ! "$SIZE" = "0" ]; then
+    echo "What should the filename be? (useful for testing mimetype handling) [delete-me.txt]:"
+    read FILENAME
+    if [ "$FILENAME" = "" ]; then
+        FILENAME="delete-me.txt"
+    fi
+    ATTACHMENT=$PROJECT_ROOT/themailserver/app/data/$FILENAME
+    rm -f $ATTACHMENT
+    dd if=/dev/zero of=$ATTACHMENT bs=1048576 count=$SIZE > /dev/null 2>&1
+    echo "Sending... please wait"
+    lamson send -sender test@sanderslabs.us -to $TO -subject "Test email with attachment" -body "This is a test email" -attach $ATTACHMENT -port 8823 2>&1 | tail -n 4
+    rm $ATTACHMENT
+else
+    echo "Sending... please wait"
+    lamson send -sender test@sanderslabs.us -to $TO -subject "Test email" -body "This is a test email" -port 8823  2>&1
+fi
 
-# delete it
-rm $ATTACHMENT
 echo "Done"

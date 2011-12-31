@@ -26,10 +26,30 @@ cd themailserver
 
 echo "Who would you like to send to? [$USER-clipboard@sanderslabs.us]:"
 read TO
-
 if [ "$TO" = "" ]; then
     TO="$USER-clipboard@sanderslabs.us"
 fi
 
-ATTACHMENT=$PROJECT_ROOT/themailserver/app/data/cat-checking-email.jpg
-lamson send -sender test@sanderslabs.us -to $TO -subject "Hello World!" -body "Hello World!" -port 8823 -attach $ATTACHMENT
+echo "How many megabytes should the attachment be? [25]:"
+read SIZE
+if [ "$SIZE" = "" ]; then
+    SIZE=25
+fi
+
+echo "What should the filename be? (useful for testing mimetype handling) [delete-me.pdf]:"
+read FILENAME
+if [ "$FILENAME" = "" ]; then
+    FILENAME="delete-me.pdf"
+fi
+
+
+ATTACHMENT=$PROJECT_ROOT/themailserver/app/data/$FILENAME
+rm -f $ATTACHMENT
+echo "Sending... please wait"
+# create a large file, send it
+dd if=/dev/zero of=$ATTACHMENT bs=1048576 count=$SIZE > /dev/null 2>&1
+lamson send -sender test@sanderslabs.us -to $TO -subject "Testing attachments" -body "Attached $SIZE megabyte file" -port 8823 -attach $ATTACHMENT > /dev/null 2>&1
+
+# delete it
+rm $ATTACHMENT
+echo "Done"

@@ -31,5 +31,20 @@ if [ "$TO" = "" ]; then
     TO="$USER-clipboard@sanderslabs.us"
 fi
 
-ATTACHMENT=$PROJECT_ROOT/themailserver/app/data/cat-checking-email.jpg
-lamson send -sender test@sanderslabs.us -to $TO -subject "Hello World!" -body "Hello World!" -port 8823 -attach $ATTACHMENT
+echo "How many megabytes should the attachment be? [25]:"
+read SIZE
+
+if [ "$SIZE" = "" ]; then
+    SIZE=25
+fi
+
+ATTACHMENT=$PROJECT_ROOT/themailserver/app/data/large-attachment-delete-me.pdf
+rm -f $ATTACHMENT
+echo "Sending... please wait"
+# create a large file, send it
+dd if=/dev/zero of=$ATTACHMENT bs=1048576 count=$SIZE > /dev/null 2>&1
+lamson send -sender test@sanderslabs.us -to $TO -subject "Testing attachments" -body "Attached file of $SIZE megabytes" -port 8823 -attach $ATTACHMENT > /dev/null 2>&1
+
+# delete it
+rm $ATTACHMENT
+echo "Done"

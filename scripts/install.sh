@@ -67,12 +67,9 @@ install_requirements(){
     deactivate
 }
 
-setup_muttrc(){
-
-}
 
 check_installed
 create_virtualenv
 install_requirements
-setup_muttrc
+
 echo "Installation complete"
